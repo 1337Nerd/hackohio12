@@ -1,4 +1,6 @@
 import puppeteer from "puppeteer";
+import puppeteerExtra from 'puppeteer-extra';
+import Stealth from 'puppeteer-extra-plugin-stealth';
 
 // TODO: Now it's your turn to improve the scraper and make him get more data from the Quotes to Scrape website.
 // Here's a list of potential improvements you can make:
@@ -16,6 +18,21 @@ const getQuotes = async () => {
     defaultViewport: null,
   });
 
+puppeteerExtra.use(Stealth());
+
+const browserObj = await puppeteerExtra.launch();
+const newpage = await browserObj.newPage();
+
+await newpage.setViewport();
+
+await newpage.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36');
+
+await newpage.goto('https://www.barcodelookup.com/998390023207');
+await newpage.waitForNetworkIdle();
+
+await newpage.screenshot({ path: 'screenshot_stealth.png'});
+
+
   // Open a new page
   const page = await browser.newPage();
 
@@ -27,7 +44,7 @@ const getQuotes = async () => {
   });
 
   // Get page data
-  const quotes = await page.evaluate(() => {
+  const quotes = await newpage.evaluate(() => {
     // Fetch the first element with class "quote"
     // Get the displayed text and returns it
     const quoteList = document.querySelectorAll("col-50 product-details");
@@ -43,6 +60,7 @@ const getQuotes = async () => {
 
     //   const author = quote.querySelector(".author").innerText;
 
+    console.log(text);
       return { text };
     });
   });
