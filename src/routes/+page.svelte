@@ -4,14 +4,16 @@
 	let error = ''
 	let video: HTMLVideoElement
 	onMount(async() => {
-		/*
-		const scanner = new BarcodeDetector({
-			formats: ["code_39", "codabar", "ean_13"]
-		})
-			*/
 		if (!navigator.mediaDevices?.getUserMedia)
 			return error = 'Camera not supported'
-		navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }).then(stream => video.srcObject = stream);
+		if (!("BarcodeDetector" in globalThis))
+			return error = 'Barcode scanner not supported'
+		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+		video.srcObject = stream
+		const supported = await BarcodeDetector.getSupportedFormats()
+		const scanner = new BarcodeDetector({
+			formats: supported
+		})
 
 	})
 </script>
