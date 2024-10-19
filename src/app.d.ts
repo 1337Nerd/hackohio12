@@ -1,6 +1,9 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
+	interface Window {
+		BarcodeDetector: any
+	}
 	namespace App {
 		// interface Error {}
 		// interface Locals {}

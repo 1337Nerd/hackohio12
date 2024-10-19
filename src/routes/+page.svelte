@@ -10,8 +10,8 @@
 			return error = 'Barcode scanner not supported'
 		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
 		video.srcObject = stream
-		const supported = await BarcodeDetector.getSupportedFormats()
-		const scanner = new BarcodeDetector({
+		const supported = await window.BarcodeDetector.getSupportedFormats()
+		const scanner = new window.BarcodeDetector({
 			formats: supported
 		})
 
