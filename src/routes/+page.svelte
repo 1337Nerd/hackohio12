@@ -11,25 +11,33 @@
 			error = 'Barcode scanner not supported'
 			return
 		}
-		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
-		const fps = stream.getVideoTracks()[0].getSettings().frameRate ?? 1
+		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: window.innerHeight }, height: { ideal: window.innerWidth } }, audio: false })
+		let animationFrameId: number
 		node.srcObject = stream
 		const supported = await BarcodeDetector.getSupportedFormats()
 		const scanner = new BarcodeDetector({ formats: supported })
 		const detectBarcode = async() => {
-			if (!node.readyState)
-				return
-			const codes = await scanner.detect(node)
-			if (!codes.length)
-				return error = ''
-			console.log('detected')
-			error = codes.map(code => code.rawValue).toString()
+			try {
+				if (node.readyState > 1) {
+					const codes = await scanner.detect(node)
+					if (!codes.length)
+						error = ''
+					else {
+						console.log('detected', codes.map(code => code.rawValue).toString())
+						error = codes.map(code => code.rawValue).toString()
+					}
+				}
+			}
+			catch(e) {
+				console.log(e)
+			}
+			animationFrameId = requestAnimationFrame(detectBarcode)
 		}
-		const scan = setInterval(detectBarcode, 1000 / fps)
+		detectBarcode()
 		return {
 			destroy() {
 				stream.getTracks().forEach(track => track.stop())
-				clearInterval(scan)
+				cancelAnimationFrame(animationFrameId)
 			}
 		}
 	}
