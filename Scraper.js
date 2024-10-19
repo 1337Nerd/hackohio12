@@ -1,6 +1,6 @@
 import { connect } from 'puppeteer-real-browser'
 
-async function  getData(ID)  {
+async function getData(ID)  {
     connect({
 
         headless: 'auto',
@@ -46,10 +46,6 @@ async function  getData(ID)  {
         await page.close();
 
         return val1;
-
-        
-        
-        
     })
     .catch(error=>{
         console.log(error.message)
