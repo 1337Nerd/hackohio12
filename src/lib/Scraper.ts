@@ -1,23 +1,15 @@
 import { connect } from 'puppeteer-real-browser'
 
-async function getData(ID)  {
+export async function getData(id: string)  {
     connect({
 
-        headless: 'auto',
-    
         args: [],
     
         customConfig: {},
     
-        skipTarget: [],
-    
-        fingerprint: false,
-    
         turnstile: true,
     
         connectOption: {},
-    
-        tf: true,
     
         // proxy:{
         //     host:'<proxy-host>',
@@ -29,7 +21,7 @@ async function getData(ID)  {
     })
     .then(async response => {
         const {browser, page} = response
-        await page.goto('https://www.barcodelookup.com/' + ID, {
+        await page.goto('https://www.barcodelookup.com/' + id, {
             waitUntil: "domcontentloaded",
         });
             // Fetch the first element with class "quote"
@@ -50,4 +42,4 @@ async function getData(ID)  {
         console.log(error.message)
     })
   };
-  getData(998390023207); //pixel 4a phone
+  getData('998390023207'); //pixel 4a phone

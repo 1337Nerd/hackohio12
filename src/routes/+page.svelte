@@ -1,19 +1,8 @@
 <script lang="ts">
 	import '../app.css'
 	import type { Action } from 'svelte/action'
-	let cvedata = ''
+	let cveData
 	let error = ''
-	async function getProduct(upc: string) {
-		const res = await fetch(`/api/barcode/${upc}`)
-		const data = await res.json()
-		const { manufacturer, model, title } = data.products[0]
-		return { manufacturer, model, title }
-	}
-	async function getCVEByMan(man: string) {
-		const res = await fetch(`/api/vendor/${man}`)
-		const data = await res.json()
-		return data
-	}
 	const videoHandler: Action<HTMLVideoElement> = async(node) => {
 		if (!navigator.mediaDevices?.getUserMedia) {
 			error = 'Camera not supported'
@@ -37,8 +26,11 @@
 					else {
 						console.log('detected', codes.map(code => code.rawValue).toString())
 						error = codes.map(code => code.rawValue).toString()
-						const { manufacturer, model, title } = await getProduct(codes[0].rawValue)
+						const res = await fetch(`/api/barcode/${codes[0].rawValue}`)
+						cveData = await res.json()
+						console.log('cveData is', cveData)
 						cancelAnimationFrame(animationFrameId)
+						node.classList.add('hidden')
 						return
 					}
 				}
@@ -57,6 +49,9 @@
 		}
 	}
 </script>
-<video use:videoHandler class="size-full" autoplay muted />
+{#if cveData}
+{JSON.stringify(cveData)}
+{:else}
+<video use:videoHandler class="size-full" class:hidden={cveData} autoplay muted />
 {error}
-{cvedata}
+{/if}

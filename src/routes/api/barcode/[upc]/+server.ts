@@ -90,5 +90,5 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 	console.log('closest is', closest)
 	const cve = await findVulns(`${manufacturer}/${closest[0].original}`)
 	console.log('cve is', cve)
-	return json(testData)
+	return json(cve)
 }
