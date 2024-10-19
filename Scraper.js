@@ -40,7 +40,7 @@ async function getData(ID)  {
             
 
        
-        console.log(await quoteList + "    AHAHGLKHKJLAKHG    ");
+        console.log(await quoteList);
 
         await page.close();
 
@@ -50,4 +50,4 @@ async function getData(ID)  {
         console.log(error.message)
     })
   };
-  getData(998390023207);
+  getData(998390023207); //pixel 4a phone
