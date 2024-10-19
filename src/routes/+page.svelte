@@ -1,23 +1,30 @@
 <script lang="ts">
 	import '../app.css'
-	import { onMount } from "svelte"
+	import type { Action } from 'svelte/action'
 	let error = ''
-	let video: HTMLVideoElement
-	onMount(async() => {
-		if (!navigator.mediaDevices?.getUserMedia)
-			return error = 'Camera not supported'
-		if (!("BarcodeDetector" in globalThis))
-			return error = 'Barcode scanner not supported'
+	const videoHandler: Action = async(node: HTMLVideoElement) => {
+		if (!navigator.mediaDevices?.getUserMedia) {
+			error = 'Camera not supported'
+			return
+		}
+		if (!("BarcodeDetector" in globalThis)) {
+			error = 'Barcode scanner not supported'
+			return
+		}
 		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
-		video.srcObject = stream
+		node.srcObject = stream
 		const supported = await BarcodeDetector.getSupportedFormats()
 		const scanner = new BarcodeDetector({
 			formats: supported
 		})
-
-	})
+		return {
+			destroy() {
+				stream.getTracks().forEach(track => track.stop())
+			}
+		}
+	}
 </script>
 <div class="size-full">
-	<video class="size-full" bind:this={video} autoplay />
+	<video use:videoHandler class="size-full" autoplay />
 	<div>{error}</div>
 </div>
