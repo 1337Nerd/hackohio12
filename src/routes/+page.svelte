@@ -280,8 +280,31 @@
 	}
 </script>
 {#if cveData}
-{JSON.stringify(cveData)}
+    {#each cveData.cvelistv5 as temp}
+        {#each temp.filter(cve => typeof cve !== 'string') as cve}
+            {@const vulnerability = cve.containers?.cna.descriptions}
+            {@const referencesList = cve.containers?.cna.references}
+            <div class="p-8">
+                {#each vulnerability as weak}
+                    {#if JSON.stringify(weak.value)}
+                        {JSON.stringify(weak.value)}
+                    {/if}
+                {/each}
+                
+        
+            {#if referencesList}
+                {#each referencesList as ref}
+                    <div class="p-1">
+                        {#if JSON.stringify(ref.tags)}
+                            {JSON.stringify(ref.url)}
+                        {/if} 
+                    </div>
+                {/each}
+            {/if}
+            </div>
+        {/each}
+    {/each}
 {:else}
-<video use:videoHandler class="size-full" class:hidden={cveData} autoplay muted />
-{error}
+    <video use:videoHandler class="size-full" class:hidden={cveData} autoplay muted />
+    {error}
 {/if}
