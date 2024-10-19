@@ -22,7 +22,7 @@ const getQuotes = async () => {
   // On this new page:
   // - open the "http://quotes.toscrape.com/" website
   // - wait until the dom content is loaded (HTML is ready)
-  await page.goto("", {
+  await page.goto("https://www.barcodelookup.com/998390023207", {
     waitUntil: "domcontentloaded",
   });
 
@@ -30,27 +30,34 @@ const getQuotes = async () => {
   const quotes = await page.evaluate(() => {
     // Fetch the first element with class "quote"
     // Get the displayed text and returns it
-    const quoteList = document.querySelectorAll(".quote");
+    const quoteList = document.querySelectorAll("col-50 product-details");
 
     // Convert the quoteList to an iterable array
     // For each quote fetch the text and author
     return Array.from(quoteList).map((quote) => {
       // Get the sub-elements from the previously fetched quote element
-      const text = quote.querySelector(".text").innerText;
-      const author = quote.querySelector(".author").innerText;
+      const text = quote.querySelector("h4");
+    // const fdsa = page.$eval(
+    //     'h4',
+    //     ((el) => el.textContent));
 
-      return { text, author };
+    //   const author = quote.querySelector(".author").innerText;
+
+      return { text };
     });
   });
 
   // Display the quotes
-  console.log(quotes);
+//   const text = page.$eval(
+//     'h4',
+//     ((el) => el.textContent));
+console.log(quotes[0]);
 
   // Click on the "Next page" button
-  await page.click(".pager > .next > a");
+//   await page.click(".pager > .next > a");
 
   // Close the browser
-  await browser.close();
+//   await browser.close();
 };
 
 // Start the scraping
