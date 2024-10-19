@@ -38,9 +38,6 @@
 						console.log('detected', codes.map(code => code.rawValue).toString())
 						error = codes.map(code => code.rawValue).toString()
 						const { manufacturer, model, title } = await getProduct(codes[0].rawValue)
-						console.log(manufacturer, model, title)
-						const data = await getCVEByMan(manufacturer)
-						console.log('data is', data)
 						cancelAnimationFrame(animationFrameId)
 						return
 					}
