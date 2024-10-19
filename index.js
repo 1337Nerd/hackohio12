@@ -27,7 +27,9 @@ await newpage.setViewport();
 
 await newpage.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36');
 
-await newpage.goto('https://www.barcodelookup.com/998390023207');
+await newpage.goto('https://www.barcodelookup.com/998390023207', {
+  waitUntil: 'domcontentloaded',
+});
 await newpage.waitForNetworkIdle();
 
 await newpage.screenshot({ path: 'screenshot_stealth.png'});
@@ -45,6 +47,7 @@ await newpage.screenshot({ path: 'screenshot_stealth.png'});
 
   // Get page data
   const quotes = await newpage.evaluate(() => {
+    console.log("help");
     // Fetch the first element with class "quote"
     // Get the displayed text and returns it
     const quoteList = document.querySelectorAll("col-50 product-details");
