@@ -17,9 +17,17 @@
 		const scanner = new BarcodeDetector({
 			formats: supported
 		})
+		const detectBarcode = async() => {
+			const codes = await scanner.detect(node)
+			if (!codes.length)
+				return
+			error = codes.map(code => code.rawValue).toString()
+		}
+		const scan = setInterval(detectBarcode, 1000)
 		return {
 			destroy() {
 				stream.getTracks().forEach(track => track.stop())
+				clearInterval(scan)
 			}
 		}
 	}
