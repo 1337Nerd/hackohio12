@@ -40,8 +40,7 @@ async function getData(ID)  {
             
 
        
-        console.log(await quoteList + "    AHAHGLKHKJLAKHG    "
-        );
+        console.log(await quoteList + "    AHAHGLKHKJLAKHG    ");
 
         await page.close();
 
