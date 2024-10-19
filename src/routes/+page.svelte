@@ -2,7 +2,7 @@
 	import '../app.css'
 	import type { Action } from 'svelte/action'
 	let error = ''
-	const videoHandler: Action = async(node: HTMLVideoElement) => {
+	const videoHandler: Action<HTMLVideoElement> = async(node) => {
 		if (!navigator.mediaDevices?.getUserMedia) {
 			error = 'Camera not supported'
 			return
@@ -12,18 +12,20 @@
 			return
 		}
 		const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+		const fps = stream.getVideoTracks()[0].getSettings().frameRate ?? 1
 		node.srcObject = stream
 		const supported = await BarcodeDetector.getSupportedFormats()
-		const scanner = new BarcodeDetector({
-			formats: supported
-		})
+		const scanner = new BarcodeDetector({ formats: supported })
 		const detectBarcode = async() => {
+			if (!node.readyState)
+				return
 			const codes = await scanner.detect(node)
 			if (!codes.length)
-				return
+				return error = ''
+			console.log('detected')
 			error = codes.map(code => code.rawValue).toString()
 		}
-		const scan = setInterval(detectBarcode, 1000)
+		const scan = setInterval(detectBarcode, 1000 / fps)
 		return {
 			destroy() {
 				stream.getTracks().forEach(track => track.stop())
@@ -32,7 +34,5 @@
 		}
 	}
 </script>
-<div class="size-full">
-	<video use:videoHandler class="size-full" autoplay />
-	<div>{error}</div>
-</div>
+<video use:videoHandler class="size-full" autoplay muted />
+{error}
