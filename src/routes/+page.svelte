@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte"
-	let stream
+	let error = ''
 	let video: HTMLVideoElement
 	onMount(async() => {
 		/*
@@ -8,17 +8,13 @@
 			formats: ["code_39", "codabar", "ean_13"]
 		})
 			*/
-		stream =  await navigator.mediaDevices.getUserMedia({
-			video: {
-				facingMode: 'environment',
-				width: 640,
-				height: 480
-			}
-		})
-		video.srcObject = stream
+		if (!navigator.mediaDevices?.getUserMedia)
+			return error = 'Camera not supported'
+		navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }).then(stream => video.srcObject = stream);
 
 	})
 </script>
 <div class="container">
 	<video bind:this={video} autoplay></video>
+	<div>{error}</div>
 </div>
