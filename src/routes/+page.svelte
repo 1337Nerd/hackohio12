@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.css'
 	import { onMount } from "svelte"
 	let error = ''
 	let video: HTMLVideoElement
@@ -14,7 +15,7 @@
 
 	})
 </script>
-<div class="container">
-	<video bind:this={video} autoplay></video>
+<div class="size-full">
+	<video class="size-full" bind:this={video} autoplay></video>
 	<div>{error}</div>
 </div>
