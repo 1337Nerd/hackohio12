@@ -14,7 +14,7 @@
 </script>
 <header class="bg-white p-4 shadow-md fixed w-full flex items-center z-10">
 	<button type="button" on:click={onReset}>
-		<img src={icon} class="h-full max-h-16 inline-block w-auto aspect-square" alt="riskBuster Icon" />
+		<img src={icon} class="-translate-x-1/4 size-16 inline-block w-auto aspect-square" alt="riskBuster Icon" />
 	</button>
 </header>
 <div class="pt-24 relative">
