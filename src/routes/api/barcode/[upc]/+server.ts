@@ -1,6 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit'
 import { search } from 'fast-fuzzy'
-import { getData } from '$lib/Scraper'
 const testData = {
 	"products": [
 		{
@@ -65,7 +64,6 @@ async function getVendor(vendor: string) {
 }
 
 function findClosest(targetProduct: string, products: string[]) {
-	console.log('target is', targetProduct)
 	return search(targetProduct, products, { returnMatchData: true })
 }
 
@@ -79,18 +77,12 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 	const { upc } = params
 	if (!upc)
 		return new Response(null, { status: 404 })
-	console.log('upc is', upc)
-	const temp = await getData(upc)
-	console.log('temp is', temp)
 	const { manufacturer, model, title } = testData.products[0]
-	console.log(manufacturer, model, title)
 	const products = await getVendor(manufacturer)
 	const targetProduct = (model || title).replaceAll(manufacturer, '').replace(/\s+-\s+.*$/gi, '').trim()
 	const closest = findClosest(targetProduct, products)
-	console.log('closest is', closest)
 	if (closest.length === 0)
 		return json({ vendor: manufacturer, products })
 	const cve = await findVulns(`${manufacturer}/${closest[0].original}`)
-	console.log('cve is', cve)
 	return json(cve)
 }
