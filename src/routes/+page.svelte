@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css'
+	import manifest from '$lib/manifest.webmanifest?url'
 	import Data from '$lib/components/Data.svelte'
 	import Selector from '$lib/components/Selector.svelte'
 	import Welcome from '$lib/components/Welcome.svelte'
@@ -40,3 +41,6 @@
 {:else}
 	<Selector onSelect={searchProduct} onReset={reset} vendor={cveData.vendor} products={cveData.products} />
 {/if}
+<svelte:head>
+	<link href={manifest} rel="manifest" />
+</svelte:head>
