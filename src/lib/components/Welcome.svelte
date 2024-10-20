@@ -1,9 +1,10 @@
 <script lang="ts">
+	import logo from '$lib/riskBustersTransparent.png'
 	export let onScan
 </script>
-<div class="flex flex-col items-center justify-center min-h-screen bg-white m-4">
-	<img src="/path/to/your/logo.png" alt="RiskBuster Logo" class="mb-8 w-40 h-auto" />
-	<h1 class="text-3xl font-bold mb-4 text-center text-red-600">Welcome to RiskBuster!</h1>
+<div class="flex flex-col items-center justify-center min-h-svh bg-white m-4">
+	<img src={logo} alt="riskBuster Logo" class="mb-8 w-72 h-auto" />
+	<h1 class="text-3xl font-bold mb-4 text-center text-red-600">Welcome to riskBuster!</h1>
 	<p class="text-gray-700 mb-6 text-center">
 		Scan a barcode to identify hardware vulnerabilities. Press the button below to launch the camera.
 	 </p>
