@@ -1,14 +1,9 @@
 <script lang="ts">
-	import { cveData } from './cveData'
+	export let onSelect
 	export let products: string[]
 	export let vendor: string
 	let search = ''
 	$: filteredData = products.map((cve) => cve.toLowerCase().replace(/_/g, ' ')).filter((cve) => cve.includes(search?.toLowerCase()))
-	async function searchProduct(product: string) {
-		const res = await fetch(`/api/product/${vendor}/${product}`)
-		const data = await res.json()
-		$cveData = data
-	}
 </script>
 <div class="bg-gray-100 min-h-screen">
 	<header class="bg-white p-4 shadow-md fixed w-full">
@@ -45,7 +40,7 @@
 		<div class="space-y-4">
 			{#each filteredData as product}
 				<button
-					on:click={() => searchProduct(product)}
+					on:click={() => onSelect(vendor, product)}
 					type="button"
 					class="bg-white p-4 min-h-32 rounded-lg shadow flex flex-row justify-between w-full"
 				>

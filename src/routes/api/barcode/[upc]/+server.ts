@@ -79,7 +79,7 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 		return new Response(null, { status: 404 })
 	const { manufacturer, model, title } = testData.products[0]
 	const products = await getVendor(manufacturer)
-	const targetProduct = (model || title).replaceAll(manufacturer, '').replace(/\s+-\s+.*$/gi, '').trim()
+	const targetProduct = (model || title)//.replaceAll(manufacturer, '').replace(/\s+-\s+.*$/gi, '').trim()
 	const closest = findClosest(targetProduct, products)
 	if (closest.length === 0)
 		return json({ vendor: manufacturer, products })

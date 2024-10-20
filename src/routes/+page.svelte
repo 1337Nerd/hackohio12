@@ -12,6 +12,11 @@
 		else
 			currentView = 'Selector'
 	}
+	async function searchProduct(vendor: string, product: string) {
+		const res = await fetch(`/api/product/${vendor}/${product}`)
+		$cveData = await res.json()
+		currentView = 'Viewer'
+	}
 </script>
 
 {#if currentView === 'Welcome'}
@@ -21,5 +26,5 @@
 {:else if currentView === 'Viewer'}
 	<Data cves={$cveData} />
 {:else}
-	<Selector vendor={$cveData.vendor} products={$cveData.products} />
+	<Selector onSelect={searchProduct} vendor={$cveData.vendor} products={$cveData.products} />
 {/if}
