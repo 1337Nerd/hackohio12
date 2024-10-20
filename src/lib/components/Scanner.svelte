@@ -5,8 +5,11 @@
 	const videoHandler: Action<HTMLVideoElement> = async (node) => {
 		if (!navigator.mediaDevices?.getUserMedia)
 			return error = 'Camera not supported'
-		if (!('BarcodeDetector' in globalThis))
-			return error = 'Barcode scanner not supported'
+		if (!('BarcodeDetector' in globalThis)) {
+			import('@undecaf/barcode-detector-polyfill').then((BarcodeDetectorPolyfill) => {
+				window.BarcodeDetector = BarcodeDetectorPolyfill.BarcodeDetectorPolyfill
+			})
+		}
 		const stream = await navigator.mediaDevices.getUserMedia({
 			video: {
 				facingMode: 'environment',
