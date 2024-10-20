@@ -3,6 +3,11 @@
 	function formatDate(date: string) {
 		return new Date(date).toLocaleDateString()
 	}
+	function truncateText(text: string) {
+		if (text.length > 40)
+			return `${text.slice(0, 40)}...`
+		return text
+	}
 </script>
 
 {#each cves.cvelistv5 as [id, data]}
@@ -34,9 +39,7 @@
 			{#each data.containers.cna.references as ref}
 				{#if ref.url}
 					<li>
-						<a href={ref.url} target="_blank" class="text-blue-500 underline"
-							>{ref.name || ref.url}</a
-						>
+						<a href={ref.url} target="_blank" class="text-blue-500 underline">{truncateText(ref.name || ref.url)}</a>
 					</li>
 				{:else}
 					<li>{ref.name}</li>
