@@ -160,6 +160,14 @@ declare global {
         cvelistv5: Array<[string, CVEData]>;
     }
 
+    namespace App {
+        interface Platform {
+			env: {
+				API_KEY: string,
+            }
+        }
+    }
+
     // interface Error {}
     // interface Locals {}
     // interface PageData {}
