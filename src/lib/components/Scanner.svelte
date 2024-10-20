@@ -1,6 +1,5 @@
  <script lang="ts">
 	import type { Action } from 'svelte/action'
-	import { cveData } from './cveData'
 	export let onCode
 	let error = ''
 	const videoHandler: Action<HTMLVideoElement> = async (node) => {
@@ -26,11 +25,9 @@
 					const codes = await scanner.detect(node)
 					if (codes.length) {
 						const res = await fetch(`/api/barcode/${codes[0].rawValue}`)
-						$cveData = await res.json()
+						const cveData = await res.json()
 						cancelAnimationFrame(animationFrameId)
-						if (($cveData as { vendor: string }).vendor)
-							return onCode(false)
-						return onCode(true)
+						return onCode(cveData)
 					}
 				}
 			} catch (e) {
