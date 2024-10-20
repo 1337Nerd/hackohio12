@@ -13,9 +13,7 @@ self.addEventListener('fetch', (event) => {
 	if (event.request.method !== 'GET')
 		return
 	async function respond() {
-		const url = new URL(event.request.url)
 		const cache = await caches.open(CACHE)
-
 		try {
 			const response = await fetch(event.request)
 			if (response.ok)
