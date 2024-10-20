@@ -1,6 +1,8 @@
 <script lang="ts">
 	export let cves: CVEList
 	export let onWrong
+	export let onReset
+	import icon from '$lib/icon.png?url'
 	function formatDate(date: string) {
 		return new Date(date).toLocaleDateString()
 	}
@@ -10,12 +12,12 @@
 		return text
 	}
 </script>
-<header class="bg-white p-4 shadow-md fixed w-full">
-	<div class="relative">
-		Back
-	</div>
+<header class="bg-white p-4 shadow-md fixed w-full flex items-center z-10">
+	<button type="button" on:click={onReset}>
+		<img src={icon} class="h-full max-h-16 inline-block w-auto aspect-square" alt="riskBuster Icon" />
+	</button>
 </header>
-<div class="mt-[4.5rem] relative">
+<div class="pt-24 relative">
 {#each cves.cvelistv5 as [id, data]}
 	<div class="p-4">
 		<h2 class="text-lg font-semibold uppercase">CVE ID: {id}</h2>

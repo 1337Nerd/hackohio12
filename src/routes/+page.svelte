@@ -34,7 +34,7 @@
 {:else if currentView === 'Scanner'}
 	<Video {onCode} />
 {:else if currentView === 'Viewer'}
-	<Data cves={$cveData} onWrong={getAll} />
+	<Data cves={$cveData} onWrong={getAll} onReset={reset} />
 {:else}
 	<Selector onSelect={searchProduct} onReset={reset} vendor={$cveData.vendor} products={$cveData.products} />
 {/if}
