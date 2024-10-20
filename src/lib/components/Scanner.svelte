@@ -24,9 +24,7 @@
 			try {
 				if (node.readyState > 1) {
 					const codes = await scanner.detect(node)
-					if (!codes.length) error = ''
-					else {
-						error = codes.map((code) => code.rawValue).toString()
+					if (codes.length) {
 						const res = await fetch(`/api/barcode/${codes[0].rawValue}`)
 						$cveData = await res.json()
 						cancelAnimationFrame(animationFrameId)
@@ -49,5 +47,5 @@
 		}
 	}
 </script>
-<video use:videoHandler class="size-full" autoplay muted />
+<video use:videoHandler class="size-full" class:hidden={error} autoplay muted />
 {error}
