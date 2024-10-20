@@ -1,13 +1,18 @@
 <script lang="ts">
 	export let onSelect
+	export let onReset
 	export let products: string[]
 	export let vendor: string
+	import icon from '$lib/icon.png?url'
 	let search = ''
 	$: filteredData = products.map((cve) => cve.toLowerCase().replace(/_/g, ' ')).filter((cve) => cve.includes(search?.toLowerCase()))
 </script>
 <div class="bg-gray-100 min-h-screen">
-	<header class="bg-white p-4 shadow-md fixed w-full">
-		<div class="relative">
+	<header class="bg-white p-4 shadow-md fixed w-full flex items-center">
+		<button type="button" on:click={onReset}>
+			<img src={icon} class="h-full max-h-16 inline-block w-auto aspect-square" alt="riskBuster Icon" />
+		</button>
+		<div class="relative flex-grow">
 			<input
 				bind:value={search}
 				type="text"
@@ -33,9 +38,9 @@
 		</div>
 	</header>
 	<main class="p-4">
-		<div class="mb-4 flex justify-between items-center mt-[4.5rem]">
+		<div class="mb-4 flex justify-between items-center mt-24">
 			<span class="text-gray-700 font-semibold">{filteredData.length} results</span>
-			<button type="button" on:click={() => search = ''} class="text-red-600 font-semibold">Clear all</button>
+			<button type="button" on:click={() => search = ''} disabled={search === ''} class:text-gray-400={search === ''} class="text-red-600 font-semibold">Clear all</button>
 		</div>
 		<div class="space-y-4">
 			{#each filteredData as product}

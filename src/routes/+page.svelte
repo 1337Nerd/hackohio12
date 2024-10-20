@@ -18,11 +18,14 @@
 		currentView = 'Viewer'
 	}
 	async function getAll() {
-		const vendor = $cveData.cvelistv5[0][1].vendor
-		const res = await fetch(`/api/product/${$cveData.cvelistv5[0][1].vendor}`)
+		const vendor = ($cveData as CVEList).cvelistv5[0][1].vendor
+		const res = await fetch(`/api/product/${($cveData as CVEList).cvelistv5[0][1].vendor}`)
 		$cveData.products = await res.json()
 		$cveData.vendor = vendor
 		currentView = 'Selector'
+	}
+	function reset() {
+		currentView = 'Welcome'
 	}
 </script>
 
@@ -33,5 +36,5 @@
 {:else if currentView === 'Viewer'}
 	<Data cves={$cveData} onWrong={getAll} />
 {:else}
-	<Selector onSelect={searchProduct} vendor={$cveData.vendor} products={$cveData.products} />
+	<Selector onSelect={searchProduct} onReset={reset} vendor={$cveData.vendor} products={$cveData.products} />
 {/if}

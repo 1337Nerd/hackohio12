@@ -12,6 +12,7 @@
 </script>
 <header class="bg-white p-4 shadow-md fixed w-full">
 	<div class="relative">
+		Back
 	</div>
 </header>
 <div class="mt-[4.5rem] relative">
@@ -54,6 +55,8 @@
 	</div>
 {/each}
 </div>
-<button on:click={onWrong} class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300">
-	Wrong Hardware?
-</button>
+<div class="flex flex-col items-center justify-center mb-4">
+	<button on:click={onWrong} class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300 my-auto">
+		Wrong Hardware?
+	</button>
+</div>
