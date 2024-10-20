@@ -8,7 +8,6 @@
 	let currentView: 'Scanner' | 'Welcome' | 'Selector' | 'Viewer' = 'Welcome'
 	let cveData: CVEList | { vendor: string, products: string[] }
 	function onCode(returnedData: CVEList | { vendor: string, products: string[] }) {
-		console.log('returned data is', returnedData)
 		cveData = returnedData
 		if ((returnedData as { vendor: string }).vendor)
 			currentView = 'Selector'
