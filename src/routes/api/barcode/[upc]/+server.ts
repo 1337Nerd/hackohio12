@@ -21,6 +21,9 @@ export const GET: RequestHandler = async({ params, fetch, platform }) => {
 	const { upc } = params
 	if (!upc)
 		return new Response(null, { status: 404 })
+	console.log('platform is', platform)
+	console.log('platform.env is', platform?.env)
+	console.log('platform.env.API_KEY is', platform?.env?.API_KEY)
 	const res = await fetch(`https://api.barcodelookup.com/v3/products?barcode=${upc}&formatted=y&key=${platform?.env?.API_KEY}`)
 	const testData = await res.json()
 	const { manufacturer, model, title } = testData.products[0]
