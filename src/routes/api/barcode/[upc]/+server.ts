@@ -77,7 +77,10 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 	const { upc } = params
 	if (!upc)
 		return new Response(null, { status: 404 })
-	const testData = await fetch(`https://api.barcodelookup.com/v3/products?barcode=3614272049529&formatted=y&key=vyaywf9e0tsjb3cov0inwurdzmqvri`)
+	/*
+	const res = await fetch(`https://api.barcodelookup.com/v3/products?barcode=${upc}&formatted=y&key=vyaywf9e0tsjb3cov0inwurdzmqvri`)
+	const testData = await res.json()
+	*/
 	const { manufacturer, model, title } = testData.products[0]
 	const products = await getVendor(manufacturer)
 	const targetProduct = (model || title).replaceAll(manufacturer, '').replace(/\s+-\s+.*$/gi, '').trim()
