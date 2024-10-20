@@ -85,7 +85,7 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 	const { manufacturer, model, title } = testData.products[0]
 	console.log(manufacturer, model, title)
 	const products = await getVendor(manufacturer)
-	const targetProduct = (model || title).replaceAll(manufacturer, '')//.replace(/\s+-\s+.*$/gi, '').trim()
+	const targetProduct = (model || title).replaceAll(manufacturer, '').replace(/\s+-\s+.*$/gi, '').trim()
 	const closest = findClosest(targetProduct, products)
 	console.log('closest is', closest)
 	if (closest.length === 0)

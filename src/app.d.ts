@@ -1,19 +1,19 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
-	type BarcodeFormat = 'aztec' 
-        | 'code_128' 
-        | 'code_39' 
-        | 'code_93' 
-        | 'codabar' 
-        | 'data_matrix' 
-        | 'ean_13' 
-        | 'ean_8' 
-        | 'itf' 
-        | 'pdf417' 
-        | 'qr_code' 
-        | 'upc_a' 
-        | 'upc_e' 
+    type BarcodeFormat = 'aztec'
+        | 'code_128'
+        | 'code_39'
+        | 'code_93'
+        | 'codabar'
+        | 'data_matrix'
+        | 'ean_13'
+        | 'ean_8'
+        | 'itf'
+        | 'pdf417'
+        | 'qr_code'
+        | 'upc_a'
+        | 'upc_e'
         | 'unknown';
 
     /**
@@ -78,16 +78,92 @@ declare global {
          */
         public detect(source: ImageBitmapSource): Promise<DetectedBarcode[]>;
     }
-	interface Window {
-		BarcodeDetector: BarcodeDetector
-	}
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
+    interface Window {
+        BarcodeDetector: BarcodeDetector
+    }
+    interface CVEData {
+        dataType: string;
+        dataVersion: string;
+        cveMetadata: CVEMetadata;
+        containers: Containers;
+    }
+
+    interface CVEMetadata {
+        state: string;
+        cveId: string;
+        assignerOrgId: string;
+        assignerShortName: string;
+        dateUpdated: string;
+        dateReserved: string;
+        datePublished: string;
+    }
+
+    interface Containers {
+        cna: CNA;
+        adp: ADP[];
+    }
+
+    interface CNA {
+        providerMetadata: ProviderMetadata;
+        descriptions: Description[];
+        affected: Affected[];
+        references: Reference[];
+        problemTypes: ProblemType[];
+    }
+
+    interface ProviderMetadata {
+        orgId: string;
+        shortName: string;
+        dateUpdated: string;
+    }
+
+    interface Description {
+        lang: string;
+        value: string;
+    }
+
+    interface Affected {
+        vendor: string;
+        product: string;
+        versions: Version[];
+    }
+
+    interface Version {
+        version: string;
+        status: string;
+    }
+
+    interface Reference {
+        url?: string;
+        name?: string;
+        tags?: string[];
+    }
+
+    interface ProblemType {
+        descriptions: ProblemDescription[];
+    }
+
+    interface ProblemDescription {
+        type: string;
+        lang: string;
+        description: string;
+    }
+
+    interface ADP {
+        providerMetadata: ProviderMetadata;
+        title: string;
+        references: Reference[];
+    }
+
+    interface CVEList {
+        cvelistv5: Array<[string, CVEData]>;
+    }
+
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
 }
 
-export {};
+export { };
