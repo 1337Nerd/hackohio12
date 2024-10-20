@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let cves: CVEList
+	export let onWrong
 	function formatDate(date: string) {
 		return new Date(date).toLocaleDateString()
 	}
@@ -9,7 +10,11 @@
 		return text
 	}
 </script>
-
+<header class="bg-white p-4 shadow-md fixed w-full">
+	<div class="relative">
+	</div>
+</header>
+<div class="mt-[4.5rem] relative">
 {#each cves.cvelistv5 as [id, data]}
 	<div class="p-4">
 		<h2 class="text-lg font-semibold uppercase">CVE ID: {id}</h2>
@@ -48,3 +53,7 @@
 		</ul>
 	</div>
 {/each}
+</div>
+<button on:click={onWrong} class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300">
+	Wrong Hardware?
+</button>

@@ -27,6 +27,7 @@
 					if (codes.length) {
 						const res = await fetch(`/api/barcode/${codes[0].rawValue}`)
 						$cveData = await res.json()
+						console.log('cve in scanner is', $cveData)
 						cancelAnimationFrame(animationFrameId)
 						if (($cveData as { vendor: string }).vendor)
 							return onCode(false)

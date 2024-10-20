@@ -67,9 +67,10 @@ function findClosest(targetProduct: string, products: string[]) {
 	return search(targetProduct, products, { returnMatchData: true })
 }
 
-async function findVulns(key: string) {
-	const res = await fetch(`https://vulnerability.circl.lu/api/search/${key}`)
-	const data = await res.json()
+async function findVulns(vendor: string, key: string) {
+	const res = await fetch(`https://vulnerability.circl.lu/api/search/${vendor}/${key}`)
+	const data: CVEList = await res.json()
+	data.cvelistv5.map(cve => cve[1].vendor = vendor)
 	return data
 }
 
@@ -87,6 +88,6 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 	const closest = findClosest(targetProduct, products)
 	if (closest.length === 0)
 		return json({ vendor: manufacturer, products })
-	const cve = await findVulns(`${manufacturer}/${closest[0].original}`)
+	const cve = await findVulns(manufacturer, closest[0].original)
 	return json(cve)
 }

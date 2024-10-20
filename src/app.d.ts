@@ -86,6 +86,7 @@ declare global {
         dataVersion: string;
         cveMetadata: CVEMetadata;
         containers: Containers;
+        vendor: string;
     }
 
     interface CVEMetadata {
