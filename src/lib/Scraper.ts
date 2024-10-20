@@ -42,4 +42,4 @@ export async function getData(id: string)  {
         console.log(error.message)
     })
   };
-  getData('998390023207'); //pixel 4a phone
+ // getData('998390023207'); //pixel 4a phone
