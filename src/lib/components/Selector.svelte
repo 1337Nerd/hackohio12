@@ -35,7 +35,7 @@
 	<main class="p-4">
 		<div class="mb-4 flex justify-between items-center mt-[4.5rem]">
 			<span class="text-gray-700 font-semibold">{filteredData.length} results</span>
-			<button class="text-red-600 font-semibold">Clear all</button>
+			<button type="button" on:click={() => search = ''} class="text-red-600 font-semibold">Clear all</button>
 		</div>
 		<div class="space-y-4">
 			{#each filteredData as product}
