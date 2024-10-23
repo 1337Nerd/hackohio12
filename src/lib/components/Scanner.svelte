@@ -21,7 +21,7 @@
 						const { width, height } = t.getCapabilities()
 						if ((width?.max ?? 1920) > window.innerWidth || (height?.max ?? 1080) > window.innerHeight)
 							t.applyConstraints({ aspectRatio: window.innerHeight / window.innerWidth })
-						else if (width.max && height.max)
+						else if (width?.max && height?.max)
 							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max } })
 					}
 					else {
