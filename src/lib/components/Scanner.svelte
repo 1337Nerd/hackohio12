@@ -9,7 +9,6 @@
 		}
 		let animationFrameId: number
 		const startStream = () => {
-			console.log('window is', window.innerWidth, window.innerHeight)
 			navigator.mediaDevices.getUserMedia({
 				video: {
 					facingMode: 'environment',
@@ -20,16 +19,16 @@
 					if (t.getCapabilities) {
 						const { width, height } = t.getCapabilities()
 						if ((width?.max ?? 1920) > window.innerWidth || (height?.max ?? 1080) > window.innerHeight)
-							t.applyConstraints({ aspectRatio: window.innerHeight / window.innerWidth })
+							t.applyConstraints({ aspectRatio: window.innerHeight / window.innerWidth, facingMode: 'environment' })
 						else if (width?.max && height?.max)
-							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max } })
+							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max }, facingMode: 'environment' })
 					}
 					else {
-						t.applyConstraints({ height: { ideal: window.innerHeight }, width: window.innerWidth })
+						t.applyConstraints({ height: { ideal: window.innerHeight }, width: window.innerWidth, facingMode: 'environment' })
 					}
 				})
 				node.srcObject = srcStream
-				BarcodeDetector.getSupportedFormats().then((formats) => {
+				BarcodeDetector.getSupportedFormats().then(formats => {
 					const scanner = new BarcodeDetector({ formats })
 					const detectBarcode = () => {
 						if (node.readyState > 1) {
@@ -52,7 +51,7 @@
 					error = err
 					return
 				})
-			}).catch((err) => {
+			}).catch(err => {
 				console.error('Error accessing camera:', err)
 				error = err
 				return
