@@ -34,6 +34,7 @@
 								error = err
 							})
 						}
+						animationFrameId = requestAnimationFrame(detectBarcode)
 					}
 					detectBarcode()
 				}).catch(err => {
