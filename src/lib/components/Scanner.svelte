@@ -1,47 +1,67 @@
  <script lang="ts">
 	import type { Action } from 'svelte/action'
-	export let onCode
+	export let onCode: (returnedData: CVEList | { vendor: string; products: string[] }) => void
 	let error = ''
-	const videoHandler: Action<HTMLVideoElement> = async (node) => {
-		if (!navigator.mediaDevices?.getUserMedia)
-			return error = 'Camera not supported'
-		if (!('BarcodeDetector' in globalThis)) {
-			import('@undecaf/barcode-detector-polyfill').then((BarcodeDetectorPolyfill) => {
-				window.BarcodeDetector = BarcodeDetectorPolyfill.BarcodeDetectorPolyfill
+	const videoHandler: Action<HTMLVideoElement> = (node) => {
+		if (!navigator.mediaDevices?.getUserMedia) {
+			error = 'Camera not supported'
+			return
+		}
+		let animationFrameId: number
+		const startStream = () => {
+			navigator.mediaDevices.getUserMedia({
+				video: {
+					facingMode: 'environment',
+					width: { ideal: window.innerHeight },
+					height: { ideal: window.innerWidth }
+				},
+				audio: false
+			}).then((srcStream) => {
+				node.srcObject = srcStream
+				BarcodeDetector.getSupportedFormats().then((formats) => {
+					const scanner = new BarcodeDetector({ formats })
+					const detectBarcode = () => {
+						if (node.readyState > 1) {
+							scanner.detect(node).then(codes => {
+								if (codes.length) {
+									fetch(`/api/barcode/${codes[0].rawValue}`).then(res => res.json()).then(cveData => {
+										cancelAnimationFrame(animationFrameId)
+										onCode(cveData)
+									})
+								}
+							}).catch((err) => {
+								console.error('Error detecting barcode:', err)
+								error = err
+							})
+						}
+					}
+					detectBarcode()
+				}).catch(err => {
+					console.error('Error getting supported formats:', err)
+					error = err
+					return
+				})
+			}).catch((err) => {
+				console.error('Error accessing camera:', err)
+				error = err
+				return
 			})
 		}
-		const stream = await navigator.mediaDevices.getUserMedia({
-			video: {
-				facingMode: 'environment',
-				width: { ideal: window.innerHeight },
-				height: { ideal: window.innerWidth }
-			},
-			audio: false
-		})
-		let animationFrameId: number
-		node.srcObject = stream
-		const supported = await BarcodeDetector.getSupportedFormats()
-		const scanner = new BarcodeDetector({ formats: supported })
-		const detectBarcode = async () => {
-			try {
-				if (node.readyState > 1) {
-					const codes = await scanner.detect(node)
-					if (codes.length) {
-						const res = await fetch(`/api/barcode/${codes[0].rawValue}`)
-						const cveData = await res.json()
-						cancelAnimationFrame(animationFrameId)
-						return onCode(cveData)
-					}
-				}
-			} catch (e) {
-				console.log(e)
-			}
-			animationFrameId = requestAnimationFrame(detectBarcode)
+
+		if (!('BarcodeDetector' in globalThis)) {
+			import('@undecaf/barcode-detector-polyfill').then(({ BarcodeDetectorPolyfill }) => {
+				window.BarcodeDetector = BarcodeDetectorPolyfill as unknown as BarcodeDetector
+				startStream()
+			})
 		}
-		detectBarcode()
+		else {
+			startStream()
+		}
+
 		return {
 			destroy() {
-				stream.getTracks().forEach((track) => track.stop())
+				if (node.srcObject)
+					(node.srcObject as MediaStream).getTracks().forEach(track => track.stop())
 				cancelAnimationFrame(animationFrameId)
 			}
 		}
