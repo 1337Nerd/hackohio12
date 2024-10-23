@@ -21,9 +21,9 @@
 	}
 	async function getAll() {
 		const vendor = (cveData as CVEList).cvelistv5[0][1].vendor
-		const res = await fetch(`/api/product/${(cveData as CVEList).cvelistv5[0][1].vendor}`)
-		cveData.products = await res.json()
-		cveData.vendor = vendor
+		const res = await fetch(`/api/product/${(cveData as CVEList).cvelistv5[0][1].vendor}`);
+		(cveData as { products: string[] }).products = await res.json();
+		(cveData as { vendor: string }).vendor = vendor
 		currentView = 'Selector'
 	}
 	function reset() {
