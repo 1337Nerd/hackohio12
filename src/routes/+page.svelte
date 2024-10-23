@@ -41,5 +41,10 @@
 	<Selector onSelect={searchProduct} onReset={reset} vendor={cveData.vendor} products={cveData.products} />
 {/if}
 <svelte:head>
+	<link href="https://hackohio.joshuastock.net/" rel="canonical" />
 	<link href={manifest} rel="manifest" />
+	<title>riskBusters</title>
+	<meta content="riskBusters" property="og:title" />
+	<meta content="https://hackohio.joshuastock.net/" property="og:url" />
+	<meta content="website" property="og:type" />
 </svelte:head>
