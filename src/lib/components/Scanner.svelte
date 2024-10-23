@@ -9,14 +9,25 @@
 		}
 		let animationFrameId: number
 		const startStream = () => {
+			console.log('window is', window.innerWidth, window.innerHeight)
 			navigator.mediaDevices.getUserMedia({
 				video: {
 					facingMode: 'environment',
-					width: { ideal: window.innerHeight },
-					height: { ideal: window.innerWidth }
 				},
-				audio: false
 			}).then((srcStream) => {
+				const tracks = srcStream.getTracks()
+				tracks.forEach(t => {
+					if (t.getCapabilities) {
+						const { width, height } = t.getCapabilities()
+						if ((width?.max ?? 1920) > window.innerWidth || (height?.max ?? 1080) > window.innerHeight)
+							t.applyConstraints({ aspectRatio: window.innerHeight / window.innerWidth })
+						else if (width.max && height.max)
+							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max } })
+					}
+					else {
+						t.applyConstraints({ height: { ideal: window.innerHeight }, width: window.innerWidth })
+					}
+				})
 				node.srcObject = srcStream
 				BarcodeDetector.getSupportedFormats().then((formats) => {
 					const scanner = new BarcodeDetector({ formats })
@@ -31,7 +42,6 @@
 								}
 							}).catch((err) => {
 								console.error('Error detecting barcode:', err)
-								error = err
 							})
 						}
 						animationFrameId = requestAnimationFrame(detectBarcode)
@@ -68,5 +78,5 @@
 		}
 	}
 </script>
-<video use:videoHandler class="size-full" class:hidden={error} autoplay muted />
+<video use:videoHandler class="size-full max-h-dvh" class:hidden={error} autoplay muted />
 {error}
