@@ -15,16 +15,17 @@
 				},
 			}).then((srcStream) => {
 				const tracks = srcStream.getTracks()
+				const { innerHeight, innerWidth } = window
 				tracks.forEach(t => {
 					if (t.getCapabilities) {
 						const { width, height } = t.getCapabilities()
-						if ((width?.max ?? 1920) > window.innerWidth || (height?.max ?? 1080) > window.innerHeight)
-							t.applyConstraints({ aspectRatio: window.innerHeight / window.innerWidth, facingMode: 'environment' })
+						if ((width?.max ?? 1920) > innerWidth || (height?.max ?? 1080) > innerHeight)
+							t.applyConstraints({ aspectRatio: innerHeight / innerWidth, facingMode: 'environment' })
 						else if (width?.max && height?.max)
 							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max }, facingMode: 'environment' })
 					}
 					else {
-						t.applyConstraints({ height: { ideal: window.innerHeight }, width: window.innerWidth, facingMode: 'environment' })
+						t.applyConstraints({ height: { ideal: innerHeight }, width: { ideal: innerWidth }, facingMode: 'environment' })
 					}
 				})
 				node.srcObject = srcStream
@@ -58,15 +59,10 @@
 			})
 		}
 
-		if (!('BarcodeDetector' in globalThis)) {
-			import('@undecaf/barcode-detector-polyfill').then(({ BarcodeDetectorPolyfill }) => {
-				window.BarcodeDetector = BarcodeDetectorPolyfill as unknown as BarcodeDetector
-				startStream()
-			})
-		}
-		else {
+		if (!('BarcodeDetector' in globalThis))
+			import('@undecaf/barcode-detector-polyfill').then(({ BarcodeDetectorPolyfill }) => { window.BarcodeDetector = BarcodeDetectorPolyfill as unknown as BarcodeDetector; startStream(); })
+		else
 			startStream()
-		}
 
 		return {
 			destroy() {
