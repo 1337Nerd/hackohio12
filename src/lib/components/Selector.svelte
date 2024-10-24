@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let onSelect
+	export let onSelect: (vendor: string, product: string) => Promise<void>
 	export let onReset
 	export let cveList: { vendor: string, products: string[] }
 	import icon from '$lib/icon.png?url'
