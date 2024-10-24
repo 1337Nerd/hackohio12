@@ -9,7 +9,7 @@
 	let cveData: CVEList | { vendor: string, products: string[] }
 	function onCode(returnedData: CVEList | { vendor: string, products: string[] }) {
 		cveData = returnedData
-		if ((returnedData as { vendor: string }).vendor)
+		if (typeof (returnedData as { vendor: string }).vendor === 'string')
 			currentView = 'Selector'
 		else
 			currentView = 'Viewer'
