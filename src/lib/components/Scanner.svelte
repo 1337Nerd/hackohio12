@@ -16,13 +16,14 @@
 			}).then((srcStream) => {
 				const tracks = srcStream.getTracks()
 				const { innerHeight, innerWidth } = window
+				const threshold = 2
 				tracks.forEach(t => {
 					if (t.getCapabilities) {
 						const { width, height } = t.getCapabilities()
-						if ((width?.max ?? 1920) > innerWidth || (height?.max ?? 1080) > innerHeight)
+						if ((width?.max ?? 1920) > innerWidth * threshold || (height?.max ?? 1080) > innerHeight * threshold)
 							t.applyConstraints({ aspectRatio: innerHeight / innerWidth, facingMode: 'environment' })
 						else if (width?.max && height?.max)
-							t.applyConstraints({ width: { exact: width.max }, height: { exact: height?.max }, facingMode: 'environment' })
+							t.applyConstraints({ width: { exact: width.max }, height: { exact: height.max }, facingMode: 'environment' })
 					}
 					else {
 						t.applyConstraints({ height: { ideal: innerHeight }, width: { ideal: innerWidth }, facingMode: 'environment' })
@@ -74,4 +75,4 @@
 	}
 </script>
 <video use:videoHandler class="size-full max-h-dvh" class:hidden={error} autoplay muted />
-{error}
+<div class="text-red-500 font-bold text-xl h-svh items-center flex justify-center">{error}</div>
