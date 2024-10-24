@@ -72,5 +72,5 @@
 		}
 	}
 </script>
-<video use:videoHandler class="size-full max-h-dvh" class:hidden={error} autoplay muted />
-<div class="text-red-500 font-bold text-xl h-svh items-center flex justify-center">{error}</div>
+<div aria-hidden={!error} class="text-red-500 font-bold text-xl h-svh items-center flex justify-center aria-hidden:hidden peer">{error}</div>
+<video use:videoHandler class="size-full max-h-dvh hidden peer-aria-hidden:block" autoplay muted />
