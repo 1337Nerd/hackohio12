@@ -36,10 +36,8 @@
 						if (node.readyState > 1) {
 							scanner.detect(node).then(codes => {
 								if (codes.length) {
-									fetch(`/api/barcode/${codes[0].rawValue}`).then(res => res.json()).then(cveData => {
-										cancelAnimationFrame(animationFrameId)
-										onCode(cveData)
-									})
+									cancelAnimationFrame(animationFrameId)
+									fetch(`/api/barcode/${codes[0].rawValue}`).then(res => res.json()).then(cveData => onCode(cveData))
 								}
 							}).catch((err) => {
 								console.error('Error detecting barcode:', err)
