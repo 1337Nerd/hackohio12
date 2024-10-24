@@ -1,11 +1,10 @@
 <script lang="ts">
 	export let onSelect
 	export let onReset
-	export let products: string[]
-	export let vendor: string
+	export let cveList: { vendor: string, products: string[] }
 	import icon from '$lib/icon.png?url'
 	let search = ''
-	$: filteredData = products.map((cve) => cve.toLowerCase().replace(/_/g, ' ')).filter((cve) => cve.includes(search?.toLowerCase()))
+	$: filteredData = cveList.products.map((cve) => cve.toLowerCase().replace(/_/g, ' ')).filter((cve) => cve.includes(search?.toLowerCase()))
 </script>
 <div class="bg-gray-100 min-h-screen">
 	<header class="bg-white p-4 shadow-md fixed w-full flex items-center">
@@ -45,7 +44,7 @@
 		<div class="space-y-4">
 			{#each filteredData as product}
 				<button
-					on:click={() => onSelect(vendor, product)}
+					on:click={() => onSelect(cveList.vendor, product)}
 					type="button"
 					class="bg-white p-4 min-h-32 rounded-lg shadow flex flex-row justify-between w-full"
 				>

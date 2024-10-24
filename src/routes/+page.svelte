@@ -21,7 +21,7 @@
 	}
 	async function getAll() {
 		const vendor = (cveData as CVEList).cvelistv5[0][1].vendor
-		const res = await fetch(`/api/product/${(cveData as CVEList).cvelistv5[0][1].vendor}`);
+		const res = await fetch(`/api/product/${vendor}`);
 		(cveData as { products: string[] }).products = await res.json();
 		(cveData as { vendor: string }).vendor = vendor
 		currentView = 'Selector'
@@ -38,7 +38,7 @@
 {:else if currentView === 'Viewer'}
 	<Data cves={cveData} onWrong={getAll} onReset={reset} />
 {:else}
-	<Selector onSelect={searchProduct} onReset={reset} vendor={cveData.vendor} products={cveData.products} />
+	<Selector onSelect={searchProduct} onReset={reset} cveList={cveData} />
 {/if}
 <svelte:head>
 	<link href="https://hackohio.joshuastock.net/" rel="canonical" />
