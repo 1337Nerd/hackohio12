@@ -5,40 +5,34 @@
 	import Selector from '$lib/components/Selector.svelte'
 	import Welcome from '$lib/components/Welcome.svelte'
 	import Video from '$lib/components/Scanner.svelte'
-	let currentView: 'Scanner' | 'Welcome' | 'Selector' | 'Viewer' = 'Welcome'
-	let cveData: CVEList | { vendor: string, products: string[] }
-	function onCode(returnedData: CVEList | { vendor: string, products: string[] }) {
-		cveData = returnedData
-		if (typeof (returnedData as { vendor: string }).vendor === 'string')
-			currentView = 'Selector'
-		else
-			currentView = 'Viewer'
-	}
-	async function searchProduct(vendor: string, product: string) {
-		const res = await fetch(`/api/product/${vendor}/${product}`)
-		cveData = await res.json()
-		currentView = 'Viewer'
+	let welcome = true
+	let cveData: CVEList | { vendor: string, products: string[] } | undefined
+	async function fetchProduct(vendor: string, product?: string) {
+		const res = await fetch(`/api/product/${encodeURIComponent(vendor)}${product ? '/' + encodeURIComponent(product) : ''}`)
+		return res.json()
 	}
 	async function getAll() {
 		const vendor = (cveData as CVEList).cvelistv5[0][1].vendor
-		const res = await fetch(`/api/product/${vendor}`);
-		(cveData as { products: string[] }).products = await res.json();
-		(cveData as { vendor: string }).vendor = vendor
-		currentView = 'Selector'
+		cveData = { vendor, products: await fetchProduct(vendor) }
 	}
 	function reset() {
-		currentView = 'Welcome'
+		welcome = true
+		cveData = undefined
 	}
 </script>
 
-{#if currentView === 'Welcome'}
-	<Welcome onScan={() => currentView = 'Scanner'} />
-{:else if currentView === 'Scanner'}
-	<Video {onCode} />
-{:else if currentView === 'Viewer'}
-	<Data cves={cveData} onWrong={getAll} onReset={reset} />
+{#if !cveData}
+	{#if welcome}
+		<Welcome onScan={() => welcome = false} />
+	{:else}
+		<Video onCode={(returnedData) => cveData = returnedData} />
+	{/if}
 {:else}
-	<Selector onSelect={searchProduct} onReset={reset} cveList={cveData} />
+	{#if !(cveData && 'vendor' in cveData)}
+		<Data cves={cveData} onWrong={getAll} onReset={reset} />
+	{:else}
+		<Selector onSelect={async (vendor, product) => cveData = await fetchProduct(vendor, product)} onReset={reset} cveList={cveData} />
+	{/if}
 {/if}
 <svelte:head>
 	<link href="https://hackohio.joshuastock.net/" rel="canonical" />
