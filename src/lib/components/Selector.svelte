@@ -39,7 +39,7 @@
 	<main class="p-4">
 		<div class="mb-4 flex justify-between items-center mt-24">
 			<span class="text-gray-700 font-semibold">{filteredData.length} results</span>
-			<button type="button" on:click={() => search = ''} disabled={search === ''} class:text-gray-400={search === ''} class="text-red-600 font-semibold">Clear all</button>
+			<button type="button" on:click={() => search = ''} disabled={search === ''} class="text-red-600 disabled:text-gray-400 font-semibold">Clear all</button>
 		</div>
 		<div class="space-y-4">
 			{#each filteredData as product}
