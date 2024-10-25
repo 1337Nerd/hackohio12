@@ -1,6 +1,6 @@
 <script lang="ts">
+	export let data
 	import '../app.css'
-	import manifest from '$lib/manifest.webmanifest?url'
 	import Data from '$lib/components/Data.svelte'
 	import Selector from '$lib/components/Selector.svelte'
 	import Welcome from '$lib/components/Welcome.svelte'
@@ -35,10 +35,6 @@
 	{/if}
 {/if}
 <svelte:head>
-	<link href="https://hackohio.joshuastock.net/" rel="canonical" />
-	<link href={manifest} rel="manifest" />
-	<title>riskBusters</title>
-	<meta content="riskBusters" property="og:title" />
-	<meta content="https://hackohio.joshuastock.net/" property="og:url" />
-	<meta content="website" property="og:type" />
+	<link href={data.manifest} rel="manifest" />
 </svelte:head>
+<svelte:options immutable={true} />
