@@ -6,6 +6,6 @@ export const GET: RequestHandler = async({ params, fetch }) => {
 		return new Response(null, { status: 404 })
 	const res = await fetch(`https://vulnerability.circl.lu/api/search/${encodeURIComponent(vendor?.toLowerCase())}/${encodeURIComponent(product?.toLowerCase())}`)
 	const data: CVEList = await res.json()
-	data.cvelistv5.forEach(cve => cve[1].vendor = vendor ?? '')
+	data.cvelistv5.forEach(cve => { cve[1].vendor = vendor ?? ''; cve[1].product = product })
 	return json(data)
 }

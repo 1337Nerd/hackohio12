@@ -13,7 +13,7 @@ function findClosest(targetProduct: string, products: string[]) {
 async function findVulns(vendor: string, key: string) {
 	const res = await fetch(`https://vulnerability.circl.lu/api/search/${encodeURIComponent(vendor.toLowerCase())}/${encodeURIComponent(key.toLowerCase())}`)
 	const data: CVEList = await res.json()
-	data.cvelistv5.forEach(cve => cve[1].vendor = vendor)
+	data.cvelistv5.forEach(cve => { cve[1].vendor = vendor; cve[1].product = key })
 	return data
 }
 
