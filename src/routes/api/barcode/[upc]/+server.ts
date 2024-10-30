@@ -21,12 +21,12 @@ export const GET: RequestHandler = async({ params, fetch, platform }) => {
 	const { upc } = params
 	if (!upc)
 		return new Response(null, { status: 404 })
-	const res = await fetch(`https://api.barcodelookup.com/v3/products?barcode=${upc}&formatted=y&key=${platform?.env.API_KEY}`)
+	const res = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`)
 	try {
 		const testData = await res.json()
-		const { brand, model, title } = testData.products[0]
+		const { brand, title } = testData.items[0]
 		const products = await getVendor(brand)
-		const targetProduct = (model || title).replaceAll(brand, '').replace(/\s+-\s+.*$/gi, '').trim()
+		const targetProduct = (title).replaceAll(brand, '').replace(/\s+-\s+.*$/gi, '').trim()
 		const closest = findClosest(targetProduct, products)
 		if (closest.length === 0)
 			return json({ vendor: brand, products })
